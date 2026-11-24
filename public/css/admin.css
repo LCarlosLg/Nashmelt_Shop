@@ -1,0 +1,142 @@
+/* ==========================================================
+   NASHMELT · LOGIN Y PANEL DE ADMINISTRACIÓN (#admin)
+   Secciones: 1 Login · 2 Panel admin · 3 Confirmación · 4 Responsive
+   Se carga después de styles.css (usa sus variables y componentes).
+   ========================================================== */
+
+/* Rojo para acciones destructivas (eliminar) */
+:root{--danger:#b3261e;--on-danger:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--danger:#ff9a93;--on-danger:#2a1013}}
+:root[data-theme="dark"]{--danger:#ff9a93;--on-danger:#2a1013}
+
+/* ==========================================================
+   1 · LOGIN DE CLIENTES Y ACCESO ADMIN
+   ========================================================== */
+.login{position:fixed;inset:0;z-index:100;background:var(--blush);display:flex;place-items:center;padding:16px;overflow:auto}
+.lbox{background:var(--surface);border-radius:28px;padding:28px 24px;width:min(400px,100%);display:grid;gap:12px;margin:auto;text-align:center}
+.lbox .lgo{width:112px;height:112px;border-radius:50%;margin:0 auto;display:block}
+.lbox h2{margin:0;font:700 28px/1.1 "Cormorant Garamond",Georgia,serif}
+.lbox p{margin:0;color:var(--muted)}
+.lbox .err{color:var(--brand);font-weight:500}
+.lbox .tabs{margin:0;justify-content:center}
+.lbox .wa{background:var(--brand);color:var(--on-brand)}
+
+/* Casilla "He leído y acepto el Aviso de Privacidad" */
+.lbox .agree{display:flex;align-items:flex-start;gap:10px;text-align:left;font-size:13px;line-height:1.4;color:var(--muted);cursor:pointer}
+.lbox .agree input{width:18px;height:18px;margin:1px 0 0;padding:0;border:0;background:none;flex:none;accent-color:var(--brand);cursor:pointer}
+.lbox .agree a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
+
+/* Campos de texto (login, formulario admin, buscador del inventario) */
+.lbox input,.fm input:not([type=checkbox]),.fm select,.fm textarea,.asq{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--soft);text-align:left}
+
+/* ==========================================================
+   2 · PANEL DE ADMINISTRACIÓN
+   ========================================================== */
+.admin{position:fixed;inset:0;z-index:80;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px)}
+
+/* Barra superior con el logo a la izquierda (como fondo) */
+.ah{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 20px 10px 72px;min-height:64px;background:color-mix(in srgb,var(--surface) 88%,transparent) url("../img/logo-sm.png") no-repeat 20px center/44px 44px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.ah b{font:700 22px/1 "Cormorant Garamond",Georgia,serif}
+.ab{max-width:1100px;margin:auto;padding:20px 16px calc(48px + env(safe-area-inset-bottom,0px))}
+
+/* Indicadores */
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.kp div{background:var(--soft);border-radius:16px;padding:14px 16px;font-size:12px;color:var(--muted)}
+.kp b{display:block;font-size:24px;line-height:1.2;color:var(--text)}
+
+.tabs{display:flex;gap:8px;margin:0 0 16px;overflow-x:auto}
+.tabs .chip{flex:none}
+
+/* Barra de herramientas: buscador (ocupa lo que sobra) + botón agregar */
+.tb{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.tb .asq{flex:1 1 240px;width:auto;min-width:0;padding-left:44px;border-radius:999px;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%238a7d83' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E") no-repeat 16px center}
+.addb{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;padding:12px 24px;border-radius:999px;background:var(--brand);color:var(--on-brand);font-weight:700;font-size:15px}
+.addb svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.addb *{pointer-events:none}   /* el clic siempre cae en el botón */
+
+/* Fila de inventario (también la usan los clientes, con .cu) */
+.ar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:12px;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-bottom:10px}
+.ar small{display:block;color:var(--muted)}
+.nmx{flex:1;min-width:140px}
+.stk{display:flex;gap:6px;flex-wrap:wrap}
+.stk label{font-size:11px;color:var(--muted);display:grid;gap:2px;justify-items:center}
+.stk input{width:54px;padding:6px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+
+/* Fila de producto en cuadrícula: foto | nombre + inventario | acciones */
+.ar:not(.cu){display:grid;grid-template-columns:72px minmax(0,1fr);grid-template-areas:"img info" "img stk" "acts acts";gap:10px 16px;padding:14px}
+.ar:not(.cu)>img{grid-area:img;width:72px;height:96px;object-fit:cover;border-radius:12px;align-self:start}
+.ar:not(.cu) .nmx{grid-area:info;min-width:0;align-self:end}
+.ar:not(.cu) .stk{grid-area:stk;align-self:start}
+.ar:not(.cu) .acts{grid-area:acts}
+
+/* Botones de acción por prenda (Editar foto, Ocultar, Editar, Eliminar) */
+.acts{display:flex;flex-wrap:wrap;gap:6px}
+.acts button,.pbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;text-align:center;font-size:13px;font-weight:500;transition:background .15s,color .15s,border-color .15s}
+.acts svg,.pbtn svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.acts button *,.pbtn *{pointer-events:none}   /* el clic siempre cae en el botón, no en el ícono */
+.acts button:hover,.pbtn:hover{background:var(--soft);border-color:var(--brand);color:var(--brand)}
+.acts .dng{color:var(--danger)}
+.acts .dng:hover{background:color-mix(in srgb,var(--danger) 10%,var(--surface));border-color:var(--danger);color:var(--danger)}
+
+/* Formulario de producto */
+.fm{display:grid;gap:12px;max-width:680px}
+.fm label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* Tallas e inventario: una tarjeta por talla (casilla + nombre arriba, cantidad abajo) */
+.szs{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;margin-top:10px}
+.fm .sz{display:flex;flex-wrap:wrap;align-items:center;gap:10px 8px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--text);font-size:14px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s}
+.sz input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--brand);flex:none;cursor:pointer}
+.fm .sz input[data-fq]{flex:1 0 100%;width:100%;padding:8px 10px;text-align:center;font-weight:500}
+.fm .sz:has(input[type=checkbox]:checked){border-color:var(--brand);background:color-mix(in srgb,var(--brand) 8%,var(--surface))}   /* talla elegida */
+.fm .sz:has(input[type=checkbox]:not(:checked)) input[data-fq]{opacity:.45}                                                           /* talla sin usar */
+.up{display:grid;gap:8px;margin-top:6px}
+.up img{width:90px;border-radius:12px}
+.ck{display:flex!important;align-items:center;gap:8px}
+
+.err{color:var(--brand);min-height:1em;margin:0;font-size:13px}
+
+/* Botón flotante "Volver al panel" (solo admin) */
+.backb{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:35;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:99px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:calc(100vw - 24px);text-align:center}
+
+/* ==========================================================
+   3 · VENTANA DE CONFIRMACIÓN (¿Estás seguro que deseas eliminar…?)
+   ========================================================== */
+.cdlg{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:16px;background:rgba(35,31,32,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.cbox{width:min(400px,100%);display:grid;gap:10px;padding:28px 24px 22px;border-radius:24px;background:var(--surface);text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.cico{width:56px;height:56px;border-radius:50%;margin:0 auto 4px;display:grid;place-items:center;background:color-mix(in srgb,var(--danger) 14%,var(--surface));color:var(--danger)}
+.cico svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cbox h3{margin:0;font:700 24px/1.2 "Cormorant Garamond",Georgia,serif;text-wrap:balance}
+.cbox p{margin:0;color:var(--muted);overflow-wrap:anywhere}
+.cbt{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.cbt button{padding:12px;border-radius:999px;font-weight:700;font-size:15px}
+.cno{border:1px solid var(--line);background:var(--surface)}
+.cno:hover{background:var(--soft)}
+.cyes{background:var(--danger);color:var(--on-danger)}
+.cyes:hover{filter:brightness(.92)}
+@media (prefers-reduced-motion:no-preference){
+  .cdlg{animation:cfade .15s ease-out}
+  .cbox{animation:cpop .2s ease-out}
+  @keyframes cfade{from{opacity:0}}
+  @keyframes cpop{from{opacity:0;transform:translateY(8px) scale(.97)}}}
+
+/* ==========================================================
+   4 · RESPONSIVE (el orden importa)
+   ========================================================== */
+/* Escritorio: las acciones pasan a la derecha, centradas junto a la foto */
+@media(min-width:900px){
+  .ar:not(.cu){grid-template-columns:72px minmax(0,1fr) auto;grid-template-areas:"img info acts" "img stk acts"}
+  .ar:not(.cu) .acts{flex-wrap:nowrap;align-self:center;justify-content:flex-end}}
+
+/* Móvil */
+@media(max-width:600px){
+  .r2{grid-template-columns:1fr}
+  .ar:not(.cu){grid-template-columns:56px minmax(0,1fr);grid-template-areas:"img info" "stk stk" "acts acts";padding:12px}
+  .ar:not(.cu)>img{width:56px;height:72px}
+  .acts button,.pbtn{flex:1 1 40%}
+  .tb .asq,.addb{flex:1 1 100%}
+  .ah{padding:8px 10px 8px 62px;background-position:12px center;background-size:38px 38px}
+  .ah b{font-size:19px}
+  .kp{grid-template-columns:repeat(2,1fr)}
+  .ab{padding:14px 10px calc(40px + env(safe-area-inset-bottom,0px))}
+  .backb{font-size:13px;padding:11px 14px}}
+@media(max-width:380px){.lbox{padding:20px 18px}}

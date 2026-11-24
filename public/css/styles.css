@@ -1,0 +1,273 @@
+/* ==========================================================
+   NASHMELT · ESTILOS DE LA TIENDA
+   Secciones: 1 Variables · 2 Base · 3 Estructura · 4 Catálogo ·
+   5 Filtros · 6 Componentes · 7 Carrito · 8 Modal · 9 Responsive
+   (Login y panel de administración están en admin.css)
+   ========================================================== */
+
+/* ==========================================================
+   1 · VARIABLES DE DISEÑO
+   Paleta del logo: rosa empolvado, lila, menta y tinta.
+   Cambia --brand para recolorear botones, precios y badges.
+   ========================================================== */
+:root{
+  --bg:#fffafb;        /* fondo de la página */
+  --surface:#fff;      /* header, paneles, modales */
+  --soft:#fdf0f3;      /* campos y botones suaves (buscador, iconos) */
+  --text:#231f20;      /* texto principal */
+  --muted:#7b6f75;     /* texto secundario */
+  --line:#f2e3e8;      /* separadores */
+  --brand:#c4416c;     /* rosa profundo: acciones, precios, badges */
+  --on-brand:#fff;     /* texto sobre --brand */
+  --blush:#fbcbd5;     /* rosa del logo (login) */
+  --lilac:#ece0fb;     /* lila del logo */
+  --mint:#cdeee4;      /* etiqueta "NUEVO" */
+  --mint-ink:#1f6150;
+  --ok:#25d366;        /* verde de WhatsApp */
+  color-scheme:light}
+
+/* Tema oscuro (automático o forzado con <html data-theme="dark">) */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1418;--surface:#261d23;--soft:#33262d;--text:#f8eff2;--muted:#b8a8b0;--line:#3b2f36;--brand:#f07fa3;--on-brand:#2a1620;--blush:#3a2630;--lilac:#3a2f52;--mint:#2b5c4e;--mint-ink:#d6f3ea;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1418;--surface:#261d23;--soft:#33262d;--text:#f8eff2;--muted:#b8a8b0;--line:#3b2f36;--brand:#f07fa3;--on-brand:#2a1620;--blush:#3a2630;--lilac:#3a2f52;--mint:#2b5c4e;--mint-ink:#d6f3ea;color-scheme:dark}
+
+/* ==========================================================
+   2 · BASE
+   ========================================================== */
+/* Márgenes de seguridad para móviles con notch */
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100%;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,select{font:inherit;color:var(--text)}
+input,select,textarea{font-size:16px}   /* evita el zoom automático de iOS */
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* Texto solo para lectores de pantalla */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ==========================================================
+   3 · ESTRUCTURA DE LA PÁGINA
+   Encabezado de una sola fila, categorías, título del
+   catálogo y pie de página.
+   ========================================================== */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.bar{max-width:1300px;margin:auto;display:flex;gap:16px;align-items:center;padding:10px 14px}
+
+/* Logo (imagen + nombre) */
+.brand{display:flex;align-items:center;gap:10px;min-width:0;color:inherit;text-decoration:none}
+.brand img{width:44px;height:44px;border-radius:50%;flex:none;display:block}
+.logo{font:700 26px/1 "Cormorant Garamond",Georgia,serif;white-space:nowrap}
+
+/* Buscador: píldora con lupa, centrado */
+.search{flex:1;max-width:560px;margin-inline:auto;min-width:0}
+.search input{width:100%;padding:11px 16px 11px 44px;border-radius:999px;border:1px solid transparent;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%238a7d83' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E") no-repeat 16px center}
+.search input:focus{border-color:var(--brand);outline:0;background-color:var(--surface)}
+
+/* Favoritos y carrito */
+.tools{display:flex;gap:8px;align-items:center;flex:none}
+.ib{position:relative;width:42px;height:42px;border-radius:50%;background:var(--soft);display:grid;place-items:center;flex:none}
+.ib svg,.fbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib.on{background:var(--brand);color:var(--on-brand)}
+.ib.on svg{fill:currentColor}
+.badge{position:absolute;top:-3px;right:-3px;background:var(--brand);color:var(--on-brand);border-radius:99px;font-size:11px;font-weight:700;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px;border:2px solid var(--surface)}
+
+/* Banner: ocupa el ancho del contenido y conserva su proporción en cualquier pantalla */
+.banner{max-width:1300px;margin:16px auto 0;padding:0 14px}
+.banner img{display:block;width:100%;height:auto;aspect-ratio:1792/592;border-radius:24px;background:#f1e0d6}
+
+/* Botones "Salir": texto + icono de cerrar sesión a la derecha.
+   El icono se dibuja con CSS para que el texto que escribe el JS ("Salir (Nombre)") no lo borre. */
+#out,#aout{display:inline-flex;align-items:center;gap:8px}
+#out::after,#aout::after{content:"";width:18px;height:18px;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpath d='m16 17 5-5-5-5'/%3E%3Cpath d='M21 12H9'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'/%3E%3Cpath d='m16 17 5-5-5-5'/%3E%3Cpath d='M21 12H9'/%3E%3C/svg%3E") center/contain no-repeat}
+#out:hover,#aout:hover{color:var(--brand)}
+
+/* Categorías (scroll horizontal) */
+.chips{max-width:1300px;margin:auto;display:flex;gap:8px;overflow-x:auto;padding:20px 14px 0;scrollbar-width:none}
+.chip{flex:none;padding:7px 16px;border-radius:999px;background:var(--soft);white-space:nowrap}
+.chip.on{background:var(--text);color:var(--bg)}
+
+/* Contenedor principal y título del catálogo */
+main{max-width:1300px;margin:auto;padding:18px 14px 90px;display:grid;gap:24px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+#cnt{color:var(--muted);font-size:13px}
+.ctl{display:flex;gap:8px;align-items:center}
+.top select,.fbtn{padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.fbtn{display:inline-flex;align-items:center;gap:6px}
+
+
+/* Pie de página: fondo rosa suave, invitación a las redes y derechos */
+footer{margin-top:28px;padding:40px 16px calc(28px + env(safe-area-inset-bottom,0px));text-align:center;background:color-mix(in srgb,var(--blush) 40%,var(--bg));border-top:1px solid var(--line)}
+.ft-t{margin:0 auto 18px;max-width:20ch;font:700 clamp(24px,4vw,32px)/1.15 "Cormorant Garamond",Georgia,serif;text-wrap:balance}
+.soc{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.sbtn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--text);font-weight:500;text-decoration:none;transition:background .2s,color .2s}
+.sbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sbtn:hover{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.sbtn.pri{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.sbtn.pri:hover{filter:brightness(.92)}
+.ft-loc{display:grid;justify-items:center;gap:14px;margin:30px auto 0;padding-top:26px;max-width:560px;border-top:1px solid color-mix(in srgb,var(--brand) 18%,transparent)}
+.ft-l{margin:0 0 -8px;font:700 clamp(20px,3vw,24px)/1.2 "Cormorant Garamond",Georgia,serif}
+.ft-a{margin:0;max-width:30ch;font-size:15px;text-wrap:balance}
+.ft-c{margin:28px auto 0;padding-top:16px;max-width:560px;border-top:1px solid color-mix(in srgb,var(--brand) 18%,transparent);color:var(--muted);font-size:13px}
+.ft-c a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.ft-c a:hover{color:var(--brand)}
+
+/* ==========================================================
+   4 · CATÁLOGO
+   Tarjetas sin caja: la foto lleva las esquinas redondeadas
+   y el texto va directamente sobre el fondo.
+   ========================================================== */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 12px}
+.grid>*{min-width:0}
+
+.card{display:flex;flex-direction:column;content-visibility:auto;contain-intrinsic-size:300px 420px}
+.pic{position:relative;aspect-ratio:3/4;background:var(--lilac);border-radius:18px;overflow:hidden;cursor:pointer}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+
+.fav{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);color:#8a7d83;display:grid;place-items:center;font-size:16px}
+.fav.on{color:var(--brand)}
+
+/* Etiquetas: descuento (rosa) y NUEVO (menta, el descuento baja debajo) */
+.tag{position:absolute;top:10px;left:10px;background:var(--brand);color:var(--on-brand);font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
+.tag.nw{background:var(--mint);color:var(--mint-ink)}
+.tag.nw~.tag{top:36px}
+
+.info{padding:10px 2px 0;display:grid;gap:2px}
+.nm{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.add{margin-left:auto;width:34px;height:34px;border-radius:50%;background:var(--brand);color:var(--on-brand);font-size:20px;line-height:1}
+
+.card.so .pic::after{content:"Agotado";position:absolute;inset:0;background:rgba(0,0,0,.45);color:#fff;display:grid;place-items:center;font-weight:700;pointer-events:none}
+
+.more{display:block;margin:28px auto 0;padding:12px 32px;border-radius:999px;background:var(--text);color:var(--bg)}
+.empty{text-align:center;color:var(--muted);padding:60px 0;grid-column:1/-1}
+
+/* ==========================================================
+   5 · PANEL DE FILTROS
+   Móvil: panel lateral deslizable. Escritorio (≥1000px):
+   columna fija sin caja, separada por líneas finas.
+   ========================================================== */
+.filters{position:fixed;inset:0 auto 0 0;width:min(320px,88vw);background:var(--surface);z-index:50;padding:20px;overflow:auto;transform:translateX(-105%);transition:.25s}
+.filters.open{transform:none}
+.filters h3{margin:0 0 8px;font-size:14px}
+.fg{margin:0 0 18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.fclose{float:right;font-size:22px}
+
+.rng{display:grid;gap:4px}
+.rng input{accent-color:var(--brand);width:100%}
+
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid var(--line)}
+.sw.on{outline:2px solid var(--brand);outline-offset:2px}
+
+/* ==========================================================
+   6 · COMPONENTES COMPARTIDOS
+   ========================================================== */
+.pr{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pr b{color:var(--brand);font-size:16px}
+.pr s{color:var(--muted);font-size:12px}
+.rt{font-size:12px;color:var(--muted)}
+
+/* Opciones (tallas, "Nuevo", "En oferta"…) */
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{padding:6px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.opt.on{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--surface));color:var(--brand);font-weight:700}
+.opt:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+
+.q{display:inline-flex;align-items:center;gap:8px;margin-top:4px}
+.q button{width:28px;height:28px;border-radius:50%;background:var(--soft)}
+
+.wa{background:var(--ok);color:#fff;font-weight:700;padding:14px;border-radius:14px;font-size:16px}
+.wa:disabled{opacity:.4}
+.reset{width:100%;padding:10px;border-radius:999px;border:1px solid var(--line)}
+
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);opacity:0;background:var(--text);color:var(--bg);padding:10px 18px;border-radius:99px;z-index:90;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ==========================================================
+   7 · CARRITO ("Mi pedido") Y FONDO OSCURO
+   ========================================================== */
+.ov{position:fixed;inset:0;background:rgba(35,31,32,.5);z-index:40;display:none}
+.ov.show{display:block}
+
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--surface);z-index:60;display:flex;flex-direction:column;transform:translateX(105%);transition:.25s;padding-top:env(safe-area-inset-top,0px)}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--line);font-weight:700}
+.dl{flex:1;overflow:auto;padding:10px 16px}
+
+.it{display:grid;grid-template-columns:64px 1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.it img{width:64px;height:84px;object-fit:cover;border-radius:12px}
+.it small{color:var(--muted);display:block}
+
+.df{padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:grid;gap:8px}
+.tot{display:flex;justify-content:space-between;font-size:17px;font-weight:700}
+
+/* ==========================================================
+   8 · MODAL DE PRODUCTO
+   Móvil: hoja inferior (ver sección 9).
+   ========================================================== */
+.modal{position:fixed;z-index:70;left:50%;top:50%;transform:translate(-50%,-50%);width:min(760px,94vw);
+  max-height:90vh;max-height:92dvh;
+  overflow:auto;background:var(--surface);border-radius:24px;display:none;grid-template-columns:1fr}
+.modal.show{display:grid}
+.modal img{width:100%;aspect-ratio:3/4;object-fit:cover;max-height:90dvh}
+/* Foto del modal: se puede tocar para verla completa */
+.mimg{position:relative;cursor:zoom-in;background:var(--lilac)}
+.mimg img{display:block}
+.zh{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(35,31,32,.72);color:#fff;font-size:12px;font-weight:500;pointer-events:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.zh svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+/* Visor de foto completa */
+.zoom{position:fixed;inset:0;z-index:96;display:grid;place-items:center;padding:16px;background:rgba(20,15,18,.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);cursor:zoom-out}
+.zoom img{display:block;max-width:100%;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);object-fit:contain;border-radius:12px;touch-action:pinch-zoom}
+.zx{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:26px;line-height:1;display:grid;place-items:center}
+.zx:hover{background:rgba(255,255,255,.28)}
+@media (prefers-reduced-motion:no-preference){.zoom{animation:zfade .15s ease-out}@keyframes zfade{from{opacity:0}}}
+
+.mb{padding:20px;display:grid;gap:12px;align-content:start}
+.mb h2{margin:0;font:700 26px/1.1 "Cormorant Garamond",Georgia,serif}
+
+/* ==========================================================
+   9 · RESPONSIVE (el orden importa)
+   ========================================================== */
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr);gap:24px 16px}}
+
+/* Escritorio: filtros como columna fija a la izquierda */
+@media(min-width:1000px){
+  main{grid-template-columns:240px 1fr}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .fbtn{display:none}
+  .filters{position:sticky!important;transform:none!important;inset:auto!important;top:88px!important;height:fit-content;width:auto!important;background:transparent;padding:0 20px 0 0;border-right:1px solid var(--line);z-index:1!important}
+  .fclose{display:none}}
+@media(min-width:1300px){.grid{grid-template-columns:repeat(5,1fr)}}
+@media(min-width:1600px){.bar,.chips,main{max-width:1500px}.grid{grid-template-columns:repeat(6,1fr)}}
+
+@media(min-width:640px){.modal{grid-template-columns:1fr 1fr}}
+@media(pointer:coarse){.add,.fav{width:40px;height:40px}}
+@media(max-width:999px){.filters{padding-top:calc(20px + env(safe-area-inset-top,0px))}}
+
+/* Móvil (≤640px): el buscador baja a su propia fila */
+@media(max-width:640px){
+  .bar{flex-wrap:wrap;gap:10px 8px;padding:8px 12px}
+  .brand{flex:1}
+  .brand img{width:38px;height:38px}
+  .logo{font-size:23px}
+  .search{order:3;flex:1 1 100%;max-width:none}
+  .search input{padding-block:10px}
+  .banner{margin-top:10px;padding:0 12px}
+  .banner img{aspect-ratio:1182/592;border-radius:18px}
+  #out{font-size:0;gap:0;width:42px;height:42px;padding:0;justify-content:center}   /* solo icono en celular */
+  main{padding:14px 12px 90px}
+  .modal{top:auto;bottom:0;left:0;transform:none;width:100%;border-radius:24px 24px 0 0}
+  .modal img{aspect-ratio:4/3;max-height:34dvh}
+  .mb{padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+  .drawer{width:100%}}
+
+@media(max-width:360px){.grid{gap:16px 8px}.pr b{font-size:14px}.nm{font-size:13px}.chip{padding:6px 12px}.logo{font-size:20px}}
+
+/* Botón quitar del carrito: el emoji 🗑 se reemplaza por un ícono de línea */
+.it [data-rm]{font-size:0!important;width:34px;height:34px;border-radius:50%;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%238a7d83' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5h14M8 5V3h4v2M5 5l1 12h8l1-12'/%3E%3C/svg%3E") center/18px no-repeat}
+
+/* Título del panel de administración */
+.ah b{font:700 22px/1 "Cormorant Garamond",Georgia,serif}

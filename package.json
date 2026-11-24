@@ -1,0 +1,15 @@
+{
+  "name": "nashmelt",
+  "version": "1.0.0",
+  "description": "Catálogo de ropa para mujer con pedidos por WhatsApp",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server.js",
+    "dev": "node --watch --disable-warning=ExperimentalWarning server.js",
+    "admin:password": "node --disable-warning=ExperimentalWarning scripts/admin-password.js",
+    "backup": "node --disable-warning=ExperimentalWarning scripts/backup.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nashmelt · Catálogo de ropa para mujer</title>
+<meta name="description" content="Nashmelt, moda femenina. Nueva colección: estilo y elegancia para la mujer de hoy. Elige tus favoritos y haz tu pedido por WhatsApp.">
+<meta name="theme-color" content="#fbcbd5">
+
+<!-- Vista previa al compartir el enlace (WhatsApp, Facebook, Instagram…).
+     ⚠ Cambia TU-DOMINIO.com por la dirección real de tu tienda (en las 2 líneas que lo dicen). -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nashmelt">
+<meta property="og:locale" content="es_MX">
+<meta property="og:title" content="Nashmelt · Moda femenina">
+<meta property="og:description" content="Nueva colección: estilo y elegancia para la mujer de hoy. Elige tus favoritos y haz tu pedido por WhatsApp.">
+<meta property="og:url" content="https://TU-DOMINIO.com/">
+<meta property="og:image" content="https://TU-DOMINIO.com/img/og-nashmelt.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nashmelt, moda femenina: nueva colección">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Ícono de la tienda en el teléfono (pantalla de inicio) -->
+<link rel="icon" href="img/logo-sm.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+<!-- Encabezado fijo en una sola fila: logo · buscador · favoritos y carrito (en móvil el buscador baja a su propia fila) -->
+<header>
+ <div class="bar">
+  <a class="brand" href="#" aria-label="Nashmelt, moda femenina">
+   <img src="img/logo-sm.png" alt="" width="44" height="44">
+   <span class="logo">Nashmelt</span>
+  </a>
+  <div class="search"><input id="q" type="search" placeholder="Buscar vestidos, blusas…" aria-label="Buscar"></div>
+  <div class="tools">
+   <button class="chip" id="out" hidden=""></button>
+   <button class="ib" id="favT" aria-label="Favoritos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="badge" id="favN" hidden="">0</span></button>
+   <button class="ib" id="cartT" aria-label="Mi pedido"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></svg><span class="badge" id="cartN" hidden="">0</span></button>
+  </div>
+ </div>
+</header>
+
+<!-- Banner: en escritorio y tablet se muestra completo; en móvil, un recorte sin el logo para que el texto se lea -->
+<div class="banner">
+ <picture>
+  <source media="(max-width:640px)" srcset="img/banner-m-700.jpg 700w, img/banner-m-1182.jpg 1182w" sizes="100vw">
+  <img src="img/banner-1792.jpg" srcset="img/banner-1000.jpg 1000w, img/banner-1792.jpg 1792w" sizes="(min-width:1300px) 1272px, 100vw" width="1792" height="592" fetchpriority="high" alt="Nashmelt, moda femenina. Nueva colección: estilo y elegancia para la mujer de hoy.">
+ </picture>
+</div>
+
+<!-- Categorías (scroll horizontal) -->
+<div class="chips" id="chips"></div>
+
+<!-- Contenedor principal: filtros a la izquierda (Sidebar) y productos a la derecha -->
+<main>
+ <aside class="filters" id="filters">
+  <button class="fclose" id="fx" aria-label="Cerrar">×</button>
+  <div class="fg"><h3>Rango de precio</h3><div class="rng">
+   <span id="prL">$119 – $520</span>
+   <input type="range" id="pmin" aria-label="Precio mínimo" min="119" max="520" step="10"><input type="range" id="pmax" aria-label="Precio máximo" min="119" max="520" step="10"></div></div>
+  <div class="fg"><h3>Talla</h3>
+    <div class="opts" id="fs"></div></div>
+  <div class="fg"><h3>Color</h3>
+    <div class="opts" id="fc"></div></div>
+  <div class="fg"><div class="opts"><button class="opt" id="oOff">En oferta</button></div></div>
+  <button class="reset" id="reset">Limpiar filtros</button>
+ </aside>
+
+ <section>
+  <div class="top">
+   <div class="ttl"><h1 class="sr">Nueva colección</h1><span id="cnt">10 productos</span></div>
+   <div class="ctl">
+    <button class="fbtn" id="fo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>Filtros</button>
+    <select id="sort" aria-label="Ordenar">
+     <option value="pop">Más populares</option>
+     <option value="new">Novedades</option>
+     <option value="lo">Precio: menor a mayor</option>
+     <option value="hi">Precio: mayor a menor</option>
+    </select>
+   </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <button class="more" id="more" style="display: none;">Ver más</button>
+ </section>
+</main>
+
+<footer>
+ <p class="ft-t">Síguenos en nuestras redes sociales oficiales</p>
+ <nav class="soc" aria-label="Redes sociales">
+  <a class="sbtn" href="https://www.facebook.com/share/1GQuYR7far/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg>Facebook</a>
+  <a class="sbtn" href="https://www.instagram.com/nashmelt.shop" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".6"/></svg>Instagram</a>
+ </nav>
+ <div class="ft-loc">
+  <p class="ft-l">Nos ubicamos en:</p>
+  <p class="ft-a">Jade #127, Diamante 2, 85423 Guaymas, Son.</p>
+  <a class="sbtn pri" href="https://www.google.com/maps/search/?api=1&query=Jade%20%23127%2C%20Diamante%202%2C%2085423%20Guaymas%2C%20Son." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Ver ubicación</a>
+ </div>
+ <p class="ft-c">© Nashmelt · Pedidos por WhatsApp · <a href="privacidad.html">Aviso de privacidad</a></p>
+</footer>
+
+<!-- Login de clientes (el logo ya lleva el nombre, por eso el título va oculto) -->
+<div class="login" id="login">
+ <div class="lbox">
+  <img class="lgo" src="img/logo.png" alt="Nashmelt · Moda femenina" width="112" height="112">
+  <h2 class="sr">Nashmelt</h2><p>Accede para ver el catálogo completo.</p>
+  <div class="tabs"><button class="chip on" data-lt="in">Iniciar sesión</button><button class="chip" data-lt="up">Crear cuenta</button></div>
+  <div id="li" style="display:grid;gap:10px"><input id="le" type="email" placeholder="Correo" autocomplete="email"><input id="lw" type="password" placeholder="Contraseña" autocomplete="current-password"><button class="wa" id="lgo">Entrar</button></div>
+  <div id="lu" style="display:grid;gap:10px" hidden=""><input id="rn" placeholder="Nombre completo" autocomplete="name"><input id="re" type="email" placeholder="Correo" autocomplete="email"><input id="rp" type="tel" placeholder="WhatsApp (opcional)" autocomplete="tel"><input id="rw" type="password" placeholder="Contraseña (mín. 8 caracteres)" autocomplete="new-password"><input id="rw2" type="password" placeholder="Repite la contraseña" autocomplete="new-password"><label class="agree"><input type="checkbox" id="rpv"><span>He leído y acepto el <a href="privacidad.html" target="_blank" rel="noopener">Aviso de Privacidad</a></span></label><button class="wa" id="rgo">Crear cuenta</button></div>
+  <p class="err" id="lerr"></p>
+  <a href="#admin" style="text-align:center;font-size:12px;color:var(--muted)">Soy administrador</a>
+ </div>
+</div>
+
+<!-- Acceso al panel de administración -->
+<div class="login" id="agate" hidden=""><div class="lbox"><img class="lgo" src="img/logo.png" alt="Nashmelt · Moda femenina" width="112" height="112"><h2>Panel de administración</h2><p>Acceso exclusivo para administradores.</p><input id="au" placeholder="Usuario" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"><input id="aw" type="password" placeholder="Contraseña" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false"><button class="wa" id="ago">Entrar al panel</button><p class="err" id="gmsg"></p><a class="chip" href="#" style="text-align:center;text-decoration:none">Ir a la tienda</a></div></div>
+<section class="admin" id="admin" hidden=""></section>
+<div class="ov" id="ov"></div>
+<aside class="drawer" id="drawer" aria-label="Mi pedido">
+ <div class="dh"><span>Mi pedido</span><button id="dx" style="font-size:22px" aria-label="Cerrar">×</button></div>
+ <div class="dl" id="dl"></div>
+ <div class="df"><div class="tot"><span>Total</span><span id="tot">$0</span></div><button class="wa" id="wa" disabled="">Realizar pedido por WhatsApp</button><button class="reset" id="clr">Vaciar pedido</button></div>
+</aside>
+<div class="modal" id="modal"></div>
+
+<button class="backb" id="back" hidden="">← Regresar al panel administrativo</button>
+
+<div class="toast" id="toast">Publicando en la tienda…</div>
+
+<script type="module" src="js/main.js"></script>
+
+</body></html>
