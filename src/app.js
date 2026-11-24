@@ -2,7 +2,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
-const { PUBLIC_DIR, MIME, TRUST_PROXY } = require("../config");
+const { PUBLIC_DIR, IMG_DIR, MIME, TRUST_PROXY } = require("../config");
 const { send, sendJson, fail } = require("./utils/http");
 const { securityHeaders, checkOrigin } = require("./middleware/security");
 const { getSession, requireUser, requireAdmin } = require("./middleware/auth");
@@ -62,17 +62,45 @@ function serveStatic(req, res, pathname) {
   let rel;
   try { rel = decodeURIComponent(pathname); } catch (e) { return send(res, 400, "Ruta inválida"); }
   if (rel === "/") rel = "/index.html";
-  const file = path.normalize(path.join(PUBLIC_DIR, rel));
-  if (!file.startsWith(PUBLIC_DIR + path.sep)) return send(res, 403, "Prohibido");
-  fs.readFile(file, (err, buf) => {
-    if (err) return send(res, 404, "No encontrado");
-    // Imágenes: 1 hora. Tipografías (casi nunca cambian): 7 días. El resto (HTML, CSS, JS): sin caché.
-    const cache = rel.startsWith("/img/") ? "public, max-age=3600"
-      : rel.startsWith("/fonts/") ? "public, max-age=604800"
-      : "no-store";
-    const ext = path.extname(file).toLowerCase();
-    send(res, 200, buf, MIME[ext] || EXTRA_MIME[ext] || "application/octet-stream", cache);
-  });
+
+  // Si es una imagen, priorizamos IMG_DIR (disco persistente en Render)
+  // y si no está, buscamos en public/img (fotos que vienen en el repositorio)
+  const isImage = rel.startsWith("/img/");
+  const candidates = isImage
+    ? [
+        path.normalize(path.join(IMG_DIR, rel.slice(5))),
+        path.normalize(path.join(PUBLIC_DIR, "img", rel.slice(5)))
+      ]
+    : [path.normalize(path.join(PUBLIC_DIR, rel))];
+
+  const tryServe = (i) => {
+    if (i >= candidates.length) return send(res, 404, "No encontrado");
+    const file = candidates[i];
+
+    // Seguridad: no permitir salir del directorio base
+    const base = isImage
+      ? (i === 0 ? IMG_DIR : path.join(PUBLIC_DIR, "img"))
+      : PUBLIC_DIR;
+
+    if (!file.startsWith(base + path.sep) && file !== base) {
+      return send(res, 403, "Prohibido");
+    }
+
+    fs.readFile(file, (err, buf) => {
+      if (err) return tryServe(i + 1);
+
+      const cache = isImage
+        ? "public, max-age=3600"
+        : rel.startsWith("/fonts/")
+          ? "public, max-age=604800"
+          : "no-store";
+
+      const ext = path.extname(file).toLowerCase();
+      send(res, 200, buf, MIME[ext] || EXTRA_MIME[ext] || "application/octet-stream", cache);
+    });
+  };
+
+  tryServe(0);
 }
 
 function createApp() {

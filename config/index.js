@@ -11,7 +11,7 @@ module.exports = {
   HOST: env.HOST || "127.0.0.1",
 
   PUBLIC_DIR: path.join(ROOT, "public"),
-  IMG_DIR: path.join(ROOT, "public", "img"),
+  IMG_DIR: env.IMG_DIR || path.join(ROOT, "public", "img"),
   DB_FILE: env.DB_FILE || path.join(ROOT, "data", "nashmelt.db"),
   PRODUCTS_FILE: env.PRODUCTS_FILE || path.join(ROOT, "data", "products.json"),
 
