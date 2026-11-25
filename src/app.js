@@ -30,10 +30,12 @@ const API = {
   "GET /api/admin/customers":   [account.customers, "admin"],
 };
 
-// Tipos de archivo que faltan en la tabla MIME de config.js (tipografías y manifiesto de la app)
+// Tipos de archivo que faltan en la tabla MIME de config.js (tipografías, manifiesto de la app y SEO)
 const EXTRA_MIME = {
   ".woff2": "font/woff2",
   ".webmanifest": "application/manifest+json",
+  ".xml": "application/xml; charset=utf-8",   // sitemap.xml
+  ".txt": "text/plain; charset=utf-8",        // robots.txt
 };
 
 function isSecureRequest(req) {
