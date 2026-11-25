@@ -195,7 +195,7 @@ function me(req, res, ctx) {
 async function init() {
   if (!q.adminExists.get()) {
     if (!process.env.ADMIN_PASSWORD && cfg.ADMIN_PASSWORD === "CambiaEstaClaveYA!") {
-      console.warn("⚠  Admin creado con contraseña por defecto. Cámbiala YA:");
+      console.warn(" Admin creado con contraseña por defecto. Cámbiala YA:");
       console.warn('   npm run admin:password -- "TuContraseñaLargaYSegura"');
     }
     q.insertUser.run("admin", cfg.ADMIN_USER, "Administrador", null, "", await hashPassword(cfg.ADMIN_PASSWORD), Date.now());
